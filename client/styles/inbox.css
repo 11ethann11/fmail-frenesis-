@@ -1,0 +1,180 @@
+/* inbox.css */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #1E1E1E;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar button {
+    background-color: #D32F2F;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #B71C1C;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.inbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    background-color: #1E1E1E;
+    border: 1px solid #333;
+    padding: 15px;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.message:hover {
+    transform: translateY(-5px);
+    border: 1px solid #D32F2F;
+    cursor: pointer;
+}
+
+.message strong {
+    color: #D32F2F;
+}
+
+.timestamp {
+    color: #aaa;
+    font-size: 0.85em;
+    margin-top: 5px;
+    display: block;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    background: #222;
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 1500px;
+    color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    max-width: 350px;
+    transition: all 0.3s ease-in-out;
+}
+
+.user-info:hover {
+    transform: scale(1.05);
+}
+
+.avatar {
+    font-size: 24px;
+    background: #f44336;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-details p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.user-details .email {
+    font-weight: bold;
+    font-size: 16px;
+    color: #ff5252;
+}
+
+/* Styles pour les boutons Archiver et Supprimer */
+.message-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.message-actions button {
+    background-color: #D32F2F;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.message-actions button:hover {
+    background-color: #B71C1C;
+}
+
+/* Boutons de changement de section */
+.section-buttons {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.section-buttons button {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.section-buttons button:hover {
+    background-color: #B71C1C;
+}
+
+/* Style pour les navigateurs basés sur Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 10px; /* Largeur de la barre de défilement */
+}
+
+::-webkit-scrollbar-track {
+    background: #202020; /* Couleur de l'arrière-plan */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #e50914; /* Couleur de la barre */
+    border-radius: 10px; /* Coins arrondis */
+    border: 2px solid #202020; /* Espacement autour de la barre */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f40612; /* Couleur de la barre au survol */
+}
+
+/* Style pour Firefox */
+* {
+    scrollbar-width: thin; /* Largeur fine */
+    scrollbar-color: #e50914 #202020; /* Couleurs de la barre et de l'arrière-plan */
+}

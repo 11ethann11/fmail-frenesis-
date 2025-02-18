@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envoyer un message</title>
+    <link rel="stylesheet" href="/client/styles/send.css">
+</head>
+<body>
+    <div class="container">
+        <h2>📤 Envoyer un message</h2>
+        <div class="form-group">
+            <label for="recipient">Destinataire</label>
+            <input type="text" id="recipient" placeholder="Entrez l'email du destinataire" list="emailList" required>
+            <datalist id="emailList"></datalist>
+        </div>
+        <div class="form-group">
+            <label for="subject">Sujet</label>
+            <input type="text" id="subject" placeholder="Entrez le sujet" required>
+        </div>
+        <div class="form-group">
+            <label for="content">Message</label>
+            <textarea id="content" placeholder="Écrivez votre message ici..." required></textarea>
+        </div>
+        <div class="buttons">
+            <button class="send-btn" onclick="sendMessage()">Envoyer</button>
+            <button class="back-btn" onclick="window.location.href='/client/inbox.html'">📥 Retour à la boîte de réception</button>
+        </div>
+    </div>
+
+    <script>
+    // Récupérer la liste des emails et les ajouter à la datalist
+    async function loadEmails() {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/admin/users', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const users = await response.json();
+            const emailList = document.getElementById('emailList');
+            emailList.innerHTML = "";
+            users.forEach(user => {
+                let option = document.createElement('option');
+                option.value = user.email;
+                emailList.appendChild(option);
+            });
+        }
+    }
+
+    async function sendMessage() {
+        const recipient = document.getElementById('recipient').value;
+        const subject = document.getElementById('subject').value;
+        const content = document.getElementById('content').value;
+        const token = localStorage.getItem('token');
+
+        if (!recipient || !subject || !content) {
+            alert('Tous les champs sont obligatoires !');
+            return;
+        }
+
+        const response = await fetch('http://localhost:5000/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ recipient, subject, content })
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Erreur lors de l\'envoi.');
+    }
+
+    // Charger les emails au chargement de la page
+    window.onload = loadEmails;
+    </script>
+</body>
+</html>

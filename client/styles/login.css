@@ -1,0 +1,87 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h2 {
+    color: #fff;
+}
+
+form {
+    background: #1f1f1f;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    color: #fff;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff524f;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #b30000;
+}
+
+a {
+    text-decoration: none;
+    color: #007BFF;
+    margin-top: 10px;
+}
+input {
+    background-color: #1f1f1f;
+    border: 1px solid #030303;
+}
+
+p {
+    color: #ffffff;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Style pour les navigateurs basés sur Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 10px; /* Largeur de la barre de défilement */
+}
+
+::-webkit-scrollbar-track {
+    background: #202020; /* Couleur de l'arrière-plan */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #e50914; /* Couleur de la barre */
+    border-radius: 10px; /* Coins arrondis */
+    border: 2px solid #202020; /* Espacement autour de la barre */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f40612; /* Couleur de la barre au survol */
+}
+
+/* Style pour Firefox */
+* {
+    scrollbar-width: thin; /* Largeur fine */
+    scrollbar-color: #e50914 #202020; /* Couleurs de la barre et de l'arrière-plan */
+}

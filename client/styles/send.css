@@ -1,0 +1,127 @@
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Conteneur principal */
+.container {
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+}
+
+/* Titres */
+h2 {
+    margin-bottom: 20px;
+    color: #ff4747;
+}
+
+/* Groupes de formulaire */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+/* Labels */
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #ff4747;
+}
+
+/* Champs de texte */
+input, textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    outline: none;
+}
+
+/* Ajustement pour le textarea */
+textarea {
+    height: 100px;
+    resize: none;
+    font-family: sans-serif;
+}
+
+/* Boutons */
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+
+
+/* Bouton Envoyer */
+.send-btn {
+    background: #dd3c39;
+    color: white;
+}
+
+.send-btn:hover {
+    background: #ff1a1a;
+}
+
+/* Bouton Retour */
+.back-btn {
+    background: #333;
+    color: white;
+}
+
+.back-btn:hover {
+    background: #444;
+}
+
+/* Style pour les navigateurs basés sur Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 10px; /* Largeur de la barre de défilement */
+}
+
+::-webkit-scrollbar-track {
+    background: #202020; /* Couleur de l'arrière-plan */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #e50914; /* Couleur de la barre */
+    border-radius: 10px; /* Coins arrondis */
+    border: 2px solid #202020; /* Espacement autour de la barre */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f40612; /* Couleur de la barre au survol */
+}
+
+/* Style pour Firefox */
+* {
+    scrollbar-width: thin; /* Largeur fine */
+    scrollbar-color: #e50914 #202020; /* Couleurs de la barre et de l'arrière-plan */
+}

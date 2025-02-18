@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚙️ Panneau Administrateur</title>
+    <link rel="stylesheet" href="styles/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <header>
+            <h1>⚙️ Panneau Administrateur</h1>
+        </header>
+
+        <section class="user-list">
+            <h2>📧 Liste des comptes</h2>
+            <div id="usersList" class="users-grid"></div>
+        </section>
+
+        <section class="add-user">
+            <h2>➕ Ajouter un compte</h2>
+            <div class="input-group">
+                <input type="email" id="newEmail" placeholder="Nouvel email" required>
+                <input type="password" id="newPassword" placeholder="Mot de passe" required>
+                <select id="newRole">
+                    <option value="user" selected>Utilisateur</option>
+                    <option value="admin">Administrateur</option>
+                </select>
+                <button onclick="addUser()">✅ Ajouter</button>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button class="back-btn" onclick="window.location.href='inbox.html'">📩 Retour à la boîte de réception</button>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+
+        async function loadUsers() {
+            const res = await fetch('http://localhost:5000/admin/users', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const users = await res.json();
+
+            const usersDiv = document.getElementById('usersList');
+            usersDiv.innerHTML = users.map(user => `
+                <div class="user-card">
+                    <div class="user-info">
+                        <p><strong>📧 Email :</strong> ${user.email}</p>
+
+                    </div>
+                    <div class="user-actions">
+                        <button class="delete" onclick="deleteUser('${user.email}')">🗑️ Supprimer</button>
+                        <button class="switch" onclick="switchToUser('${user.email}')">🔄 Se connecter</button>
+                        <button class="edit" onclick="editEmail('${user.email}')">✏️ Modifier email</button>
+                        <button type="button" class="change-password-btn" onclick="changePassword()">🔑 Changer le mot de passe</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function deleteUser(email) {
+            if (!confirm(`Supprimer l'utilisateur ${email} ?`)) return;
+            const res = await fetch(`http://localhost:5000/admin/users/${email}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            alert(data.message);
+            loadUsers();
+        }
+
+        async function editEmail(oldEmail) {
+            const newEmail = prompt('Entrez le nouvel email :', oldEmail);
+            if (!newEmail || newEmail === oldEmail) return;
+            const res = await fetch(`http://localhost:5000/admin/editEmail`, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ oldEmail, newEmail })
+            });
+            const data = await res.json();
+            alert(data.message);
+            loadUsers();
+        }
+
+        async function addUser() {
+            const email = document.getElementById('newEmail').value;
+            const password = document.getElementById('newPassword').value;
+            const role = document.getElementById('newRole').value;
+            if (!email || !password) {
+                alert('Veuillez remplir tous les champs.');
+                return;
+            }
+            const res = await fetch('http://localhost:5000/admin/addUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ email, password, role })
+            });
+            const data = await res.json();
+            alert(data.message);
+            loadUsers();
+        }
+
+        loadUsers();
+
+        // En dessous ya le script pour ce co apparements
+        async function switchToUser(email) {
+    if (!confirm(`⚠️ Voulez-vous vraiment vous connecter en tant que ${email} ?`)) return;
+
+    try {
+        const response = await fetch('http://localhost:5000/admin/switch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ email })
+        });
+
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Le serveur a renvoyé une réponse non-JSON. Vérifiez votre endpoint.');
+        }
+
+        const data = await response.json();
+        if (data.newToken) {
+            localStorage.setItem('token', data.newToken);
+            alert(`✅ Connecté en tant que ${email}`);
+            window.location.href = 'inbox.html';
+        } else {
+            throw new Error('Jeton non reçu. Vérifiez le serveur.');
+        }
+    } catch (error) {
+        console.error('Erreur lors de la connexion au compte :', error);
+        alert(`❌ Erreur : ${error.message}`);
+    }
+}
+
+async function changePassword(email) {
+    const newPassword = prompt(`Entrez le nouveau mot de passe pour ${email} :`);
+    if (!newPassword) return;
+
+    const res = await fetch('http://localhost:5000/admin/changePassword', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ email, newPassword })
+    });
+
+    const data = await res.json();
+    alert(data.message);
+    loadUsers();
+}
+
+    </script>
+</body>
+</html>

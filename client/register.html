@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="/client/styles/register.css">
+</head>
+<body>
+    <h2>Inscription</h2>
+    <form id="registerForm">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Mot de passe" required>
+        <button type="submit">S'inscrire</button>
+    </form>
+    
+    <a href="login.html">Déjà inscrit ? Connectez-vous ici</a>
+    
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+    
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+    
+            const res = await fetch('http://localhost:5000/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+    
+            const data = await res.json();
+            if (res.ok) {
+                alert('Inscription réussie. Connectez-vous maintenant.');
+                window.location.href = 'login.html';
+            } else {
+                alert(data.message);
+            }
+        });
+    </script>
+    
+</body>
+</html>
