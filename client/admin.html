@@ -42,7 +42,7 @@
         const token = localStorage.getItem('token');
 
         async function loadUsers() {
-            const res = await fetch('http://localhost:5000/admin/users', {
+            const res = await fetch('node1.uniobot.fr:3074/admin/users', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const users = await res.json();
@@ -66,7 +66,7 @@
 
         async function deleteUser(email) {
             if (!confirm(`Supprimer l'utilisateur ${email} ?`)) return;
-            const res = await fetch(`http://localhost:5000/admin/users/${email}`, {
+            const res = await fetch(`node1.uniobot.fr:3074/admin/users/${email}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -78,7 +78,7 @@
         async function editEmail(oldEmail) {
             const newEmail = prompt('Entrez le nouvel email :', oldEmail);
             if (!newEmail || newEmail === oldEmail) return;
-            const res = await fetch(`http://localhost:5000/admin/editEmail`, {
+            const res = await fetch(`node1.uniobot.fr:3074/admin/editEmail`, {
                 method: 'PUT',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -99,7 +99,7 @@
                 alert('Veuillez remplir tous les champs.');
                 return;
             }
-            const res = await fetch('http://localhost:5000/admin/addUser', {
+            const res = await fetch('node1.uniobot.fr:3074/admin/addUser', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,7 +119,7 @@
     if (!confirm(`⚠️ Voulez-vous vraiment vous connecter en tant que ${email} ?`)) return;
 
     try {
-        const response = await fetch('http://localhost:5000/admin/switch', {
+        const response = await fetch('node1.uniobot.fr:3074/admin/switch', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ async function changePassword(email) {
     const newPassword = prompt(`Entrez le nouveau mot de passe pour ${email} :`);
     if (!newPassword) return;
 
-    const res = await fetch('http://localhost:5000/admin/changePassword', {
+    const res = await fetch('node1.uniobot.fr:3074/admin/changePassword', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -164,30 +164,6 @@ async function changePassword(email) {
     alert(data.message);
     loadUsers();
 }
-
-const startServer = async (serverId) => {
-    try {
-        const response = await fetch('https://panel.uniobot.com/api/client/servers/' + serverId + '/power', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer VOTRE_CLE_API',  // Remplace par ta clé API de Pterodactyl
-                'Accept': 'application/json',             // Pour indiquer que tu acceptes une réponse au format JSON
-                'Content-Type': 'application/json',       // Spécifie que tu envoies des données JSON
-            },
-            body: JSON.stringify({ signal: 'start' }),  // Indique que tu veux démarrer le serveur
-        });
-
-        const data = await response.json();
-        
-        if (response.ok) {
-            console.log('Serveur démarré avec succès:', data);
-        } else {
-            console.error('Erreur:', data.error);
-        }
-    } catch (error) {
-        console.error('Erreur lors de l\'appel:', error);
-    }
-};
     </script>
 </body>
 </html>
