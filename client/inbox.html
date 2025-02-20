@@ -39,118 +39,120 @@
             <p id="userRole" class="role">Chargement...</p>
         </div>
     </div>    
-    <script>
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('Veuillez vous connecter.');
-            window.location.href = 'login.html';
-        }
+<script>
+    const API_URL = 'https://fmail-frenesis.onrender.com'; // 🔗 URL du serveur en ligne
+    const token = localStorage.getItem('token');
 
-        // 🔍 Charger les messages d'une section
-        async function loadMessages(section) {
-            try {
-                const res = await fetch(`http://localhost:5000/${section}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const emails = await res.json();
+    if (!token) {
+        alert('Veuillez vous connecter.');
+        window.location.href = 'login.html';
+    }
 
-                const container = document.getElementById(section);
-                container.innerHTML = emails.length === 0
-                    ? "<p>Aucun message dans cette section.</p>"
-                    : emails.map(e => {
-                        return `
-                        <div class="message">
-                            <strong>${section === 'inbox' ? '💌 De :' : '📨 À :'}</strong> ${section === 'inbox' ? e.sender : e.recipient}<br>
-                            <strong>📝 Sujet :</strong> ${e.subject}<br>
-                            <p>${e.content}</p>
-                            <span class="timestamp">🕒 ${new Date(e.timestamp).toLocaleString()}</span>
-                            
-                            <div class="message-actions">
-                                ${section === 'inbox' ? `<button onclick="archiveMessage('${e.id}')">🗂️ Archiver</button>` : ''}
-                                <button onclick="deleteMessage('${e.id}')">🗑️ Supprimer</button>
-                            </div>
+    // 🔍 Charger les messages d'une section
+    async function loadMessages(section) {
+        try {
+            const res = await fetch(`${API_URL}/${section}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const emails = await res.json();
+
+            const container = document.getElementById(section);
+            container.innerHTML = emails.length === 0
+                ? "<p>Aucun message dans cette section.</p>"
+                : emails.map(e => {
+                    return `
+                    <div class="message">
+                        <strong>${section === 'inbox' ? '💌 De :' : '📨 À :'}</strong> ${section === 'inbox' ? e.sender : e.recipient}<br>
+                        <strong>📝 Sujet :</strong> ${e.subject}<br>
+                        <p>${e.content}</p>
+                        <span class="timestamp">🕒 ${new Date(e.timestamp).toLocaleString()}</span>
+                        
+                        <div class="message-actions">
+                            ${section === 'inbox' ? `<button onclick="archiveMessage('${e.id}')">🗂️ Archiver</button>` : ''}
+                            <button onclick="deleteMessage('${e.id}')">🗑️ Supprimer</button>
                         </div>
-                    `}).join('');
-            } catch (error) {
-                console.error(`Erreur lors du chargement de ${section} :`, error);
+                    </div>
+                `;
+                }).join('');
+        } catch (error) {
+            console.error(`Erreur lors du chargement de ${section} :`, error);
+        }
+    }
+
+    // 🔄 Afficher la section sélectionnée
+    function showSection(section) {
+        document.getElementById('inbox').style.display = section === 'inbox' ? 'block' : 'none';
+        document.getElementById('archive').style.display = section === 'archive' ? 'block' : 'none';
+        
+        // Charger les messages à chaque changement de section
+        loadMessages(section);
+    }
+
+    // Archiver un message
+    async function archiveMessage(id) {
+        if (!confirm("Archiver ce message ?")) return;
+        try {
+            const res = await fetch(`${API_URL}/messages/${id}/archive`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            alert(data.message);
+            loadMessages('inbox');
+            loadMessages('archive');
+        } catch (error) {
+            console.error("Erreur d'archivage :", error);
+        }
+    }
+
+    // Supprimer un message
+    async function deleteMessage(id) {
+        if (!confirm("Supprimer ce message définitivement ?")) return;
+        try {
+            const res = await fetch(`${API_URL}/messages/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            alert(data.message);
+            loadMessages('inbox');
+            loadMessages('archive');
+        } catch (error) {
+            console.error("Erreur de suppression :", error);
+        }
+    }
+
+    // Charger les informations utilisateur
+    async function loadUserInfo() {
+        try {
+            const res = await fetch(`${API_URL}/me`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const user = await res.json();
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userRole').textContent = user.role === 'admin' ? "Administrateur" : "Utilisateur";
+
+            if (user.role === 'admin') {
+                document.getElementById('adminBtn').style.display = 'block';
             }
+        } catch (error) {
+            console.error("Erreur lors du chargement des infos utilisateur :", error);
+            document.getElementById('userEmail').textContent = "Erreur de chargement";
+            document.getElementById('userRole').textContent = "Erreur";
         }
-
-        // 🔄 Afficher la section sélectionnée
-        function showSection(section) {
-            document.getElementById('inbox').style.display = section === 'inbox' ? 'block' : 'none';
-            document.getElementById('archive').style.display = section === 'archive' ? 'block' : 'none';
-            
-            // Charger les messages à chaque changement de section
-            loadMessages(section);
-        }
-
-// Archiver un message
-async function archiveMessage(id) {
-    if (!confirm("Archiver ce message ?")) return;
-    try {
-        const res = await fetch(`http://localhost:5000/messages/${id}/archive`, {
-            method: 'PUT',
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json();
-        alert(data.message);
-        loadMessages('inbox');
-        loadMessages('archive');
-    } catch (error) {
-        console.error("Erreur d'archivage :", error);
     }
-}
 
-
-async function deleteMessage(id) {
-    if (!confirm("Supprimer ce message définitivement ?")) return;
-    try {
-        const res = await fetch(`http://localhost:5000/messages/${id}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json();
-        alert(data.message);
-        loadMessages('inbox');
-        loadMessages('archive');
-    } catch (error) {
-        console.error("Erreur de suppression :", error);
+    // 🔒 Déconnexion
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = 'login.html';
     }
-}
 
-
-async function loadUserInfo() {
-    try {
-        const res = await fetch('http://localhost:5000/me', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const user = await res.json();
-        document.getElementById('userEmail').textContent = user.email;
-        document.getElementById('userRole').textContent = user.role === 'admin' ? "Administrateur" : "Utilisateur";
-
-        if (user.role === 'admin') {
-            document.getElementById('adminBtn').style.display = 'block';
-        }
-    } catch (error) {
-        console.error("Erreur lors du chargement des infos utilisateur :", error);
-        document.getElementById('userEmail').textContent = "Erreur de chargement";
-        document.getElementById('userRole').textContent = "Erreur";
-    }
-}
-
-        // 🔒 Déconnexion
-        function logout() {
-            localStorage.removeItem('token');
-            window.location.href = 'login.html';
-        }
-
-        // ⚙️ Initialisation
-        loadMessages('inbox');
-        loadMessages('archive');
-        loadUserInfo();
-        showSection('inbox');
-    </script>
-
+    // ⚙️ Initialisation
+    loadMessages('inbox');
+    loadMessages('archive');
+    loadUserInfo();
+    showSection('inbox');
+</script>
 </body>
 </html>
