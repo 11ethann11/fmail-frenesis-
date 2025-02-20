@@ -6,7 +6,7 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 const db = new sqlite3('./database.db');
 
 // Middleware
@@ -325,4 +325,7 @@ app.put('/admin/editEmail', authenticateToken, isAdmin, (req, res) => {
 
 
 // Lancer le serveur
-app.listen(PORT, () => console.log(`🚀 Serveur en ligne sur http://localhost:${PORT}`));
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Serveur en ligne sur le port ${PORT}`);
+});
+
