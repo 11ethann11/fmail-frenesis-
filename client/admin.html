@@ -38,132 +38,131 @@
         </div>
     </div>
 
-    <script>
-        const token = localStorage.getItem('token');
+<script>
+    const API_URL = 'https://fmail-frenesis.onrender.com'; // 🔗 URL du serveur en ligne
+    const token = localStorage.getItem('token');
 
-        async function loadUsers() {
-            const res = await fetch('node1.uniobot.fr:3074/admin/users', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const users = await res.json();
+    async function loadUsers() {
+        const res = await fetch(`${API_URL}/admin/users`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const users = await res.json();
 
-            const usersDiv = document.getElementById('usersList');
-            usersDiv.innerHTML = users.map(user => `
-                <div class="user-card">
-                    <div class="user-info">
-                        <p><strong>📧 Email :</strong> ${user.email}</p>
-
-                    </div>
-                    <div class="user-actions">
-                        <button class="delete" onclick="deleteUser('${user.email}')">🗑️ Supprimer</button>
-                        <button class="switch" onclick="switchToUser('${user.email}')">🔄 Se connecter</button>
-                        <button class="edit" onclick="editEmail('${user.email}')">✏️ Modifier email</button>
-                        <button type="button" class="change-password-btn" onclick="changePassword()">🔑 Changer le mot de passe</button>
-                    </div>
+        const usersDiv = document.getElementById('usersList');
+        usersDiv.innerHTML = users.map(user => `
+            <div class="user-card">
+                <div class="user-info">
+                    <p><strong>📧 Email :</strong> ${user.email}</p>
                 </div>
-            `).join('');
-        }
+                <div class="user-actions">
+                    <button class="delete" onclick="deleteUser('${user.email}')">🗑️ Supprimer</button>
+                    <button class="switch" onclick="switchToUser('${user.email}')">🔄 Se connecter</button>
+                    <button class="edit" onclick="editEmail('${user.email}')">✏️ Modifier email</button>
+                    <button type="button" class="change-password-btn" onclick="changePassword('${user.email}')">🔑 Changer le mot de passe</button>
+                </div>
+            </div>
+        `).join('');
+    }
 
-        async function deleteUser(email) {
-            if (!confirm(`Supprimer l'utilisateur ${email} ?`)) return;
-            const res = await fetch(`node1.uniobot.fr:3074/admin/users/${email}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await res.json();
-            alert(data.message);
-            loadUsers();
-        }
-
-        async function editEmail(oldEmail) {
-            const newEmail = prompt('Entrez le nouvel email :', oldEmail);
-            if (!newEmail || newEmail === oldEmail) return;
-            const res = await fetch(`node1.uniobot.fr:3074/admin/editEmail`, {
-                method: 'PUT',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ oldEmail, newEmail })
-            });
-            const data = await res.json();
-            alert(data.message);
-            loadUsers();
-        }
-
-        async function addUser() {
-            const email = document.getElementById('newEmail').value;
-            const password = document.getElementById('newPassword').value;
-            const role = document.getElementById('newRole').value;
-            if (!email || !password) {
-                alert('Veuillez remplir tous les champs.');
-                return;
-            }
-            const res = await fetch('node1.uniobot.fr:3074/admin/addUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ email, password, role })
-            });
-            const data = await res.json();
-            alert(data.message);
-            loadUsers();
-        }
-
+    async function deleteUser(email) {
+        if (!confirm(`Supprimer l'utilisateur ${email} ?`)) return;
+        const res = await fetch(`${API_URL}/admin/users/${email}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        alert(data.message);
         loadUsers();
+    }
 
-        // En dessous ya le script pour ce co apparements
-        async function switchToUser(email) {
-    if (!confirm(`⚠️ Voulez-vous vraiment vous connecter en tant que ${email} ?`)) return;
+    async function editEmail(oldEmail) {
+        const newEmail = prompt('Entrez le nouvel email :', oldEmail);
+        if (!newEmail || newEmail === oldEmail) return;
+        const res = await fetch(`${API_URL}/admin/editEmail`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ oldEmail, newEmail })
+        });
+        const data = await res.json();
+        alert(data.message);
+        loadUsers();
+    }
 
-    try {
-        const response = await fetch('node1.uniobot.fr:3074/admin/switch', {
+    async function addUser() {
+        const email = document.getElementById('newEmail').value;
+        const password = document.getElementById('newPassword').value;
+        const role = document.getElementById('newRole').value;
+        if (!email || !password) {
+            alert('Veuillez remplir tous les champs.');
+            return;
+        }
+        const res = await fetch(`${API_URL}/admin/addUser`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ email })
+            body: JSON.stringify({ email, password, role })
+        });
+        const data = await res.json();
+        alert(data.message);
+        loadUsers();
+    }
+
+    async function switchToUser(email) {
+        if (!confirm(`⚠️ Voulez-vous vraiment vous connecter en tant que ${email} ?`)) return;
+
+        try {
+            const response = await fetch(`${API_URL}/admin/switch`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('Le serveur a renvoyé une réponse non-JSON. Vérifiez votre endpoint.');
+            }
+
+            const data = await response.json();
+            if (data.newToken) {
+                localStorage.setItem('token', data.newToken);
+                alert(`✅ Connecté en tant que ${email}`);
+                window.location.href = 'inbox.html';
+            } else {
+                throw new Error('Jeton non reçu. Vérifiez le serveur.');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la connexion au compte :', error);
+            alert(`❌ Erreur : ${error.message}`);
+        }
+    }
+
+    async function changePassword(email) {
+        const newPassword = prompt(`Entrez le nouveau mot de passe pour ${email} :`);
+        if (!newPassword) return;
+
+        const res = await fetch(`${API_URL}/admin/changePassword`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ email, newPassword })
         });
 
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            throw new Error('Le serveur a renvoyé une réponse non-JSON. Vérifiez votre endpoint.');
-        }
-
-        const data = await response.json();
-        if (data.newToken) {
-            localStorage.setItem('token', data.newToken);
-            alert(`✅ Connecté en tant que ${email}`);
-            window.location.href = 'inbox.html';
-        } else {
-            throw new Error('Jeton non reçu. Vérifiez le serveur.');
-        }
-    } catch (error) {
-        console.error('Erreur lors de la connexion au compte :', error);
-        alert(`❌ Erreur : ${error.message}`);
+        const data = await res.json();
+        alert(data.message);
+        loadUsers();
     }
-}
 
-async function changePassword(email) {
-    const newPassword = prompt(`Entrez le nouveau mot de passe pour ${email} :`);
-    if (!newPassword) return;
-
-    const res = await fetch('node1.uniobot.fr:3074/admin/changePassword', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ email, newPassword })
-    });
-
-    const data = await res.json();
-    alert(data.message);
     loadUsers();
-}
-    </script>
+</script>
 </body>
 </html>
