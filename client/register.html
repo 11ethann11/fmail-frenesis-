@@ -17,27 +17,34 @@
     <a href="login.html">Déjà inscrit ? Connectez-vous ici</a>
     
     <script>
+        const API_URL = 'https://fmail-frenesis.onrender.com'; // 🔗 URL du serveur en ligne
+
         document.getElementById('registerForm').addEventListener('submit', async (event) => {
             event.preventDefault();
     
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
     
-            const res = await fetch('http://localhost:5000/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-    
-            const data = await res.json();
-            if (res.ok) {
-                alert('Inscription réussie. Connectez-vous maintenant.');
-                window.location.href = 'login.html';
-            } else {
-                alert(data.message);
+            try {
+                const res = await fetch(`${API_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert('Inscription réussie. Connectez-vous maintenant.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error("Erreur lors de l'inscription :", error);
+                alert("Une erreur est survenue. Vérifiez votre connexion et réessayez.");
             }
         });
     </script>
-    
 </body>
 </html>
