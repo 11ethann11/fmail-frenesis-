@@ -28,11 +28,13 @@
         </div>
     </div>
 
-    <script>
+<script>
+    const API_URL = 'https://fmail-frenesis.onrender.com'; // 🔗 URL du serveur en ligne
+    const token = localStorage.getItem('token');
+
     // Récupérer la liste des emails et les ajouter à la datalist
     async function loadEmails() {
-        const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/admin/users', {
+        const response = await fetch(`${API_URL}/admin/users`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -45,6 +47,8 @@
                 option.value = user.email;
                 emailList.appendChild(option);
             });
+        } else {
+            console.error('Erreur lors de la récupération des emails.');
         }
     }
 
@@ -52,14 +56,13 @@
         const recipient = document.getElementById('recipient').value;
         const subject = document.getElementById('subject').value;
         const content = document.getElementById('content').value;
-        const token = localStorage.getItem('token');
 
         if (!recipient || !subject || !content) {
             alert('Tous les champs sont obligatoires !');
             return;
         }
 
-        const response = await fetch('http://localhost:5000/send', {
+        const response = await fetch(`${API_URL}/send`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,6 +77,6 @@
 
     // Charger les emails au chargement de la page
     window.onload = loadEmails;
-    </script>
+</script>
 </body>
 </html>
