@@ -17,24 +17,32 @@
 <a href="register.html">Pas encore de compte ? Inscrivez-vous ici</a>
     
     <script>
+        const API_URL = 'https://fmail-frenesis.onrender.com'; // 🔗 URL du serveur en ligne
+
         document.getElementById('loginForm').addEventListener('submit', async (event) => {
             event.preventDefault();
     
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
     
-            const res = await fetch('https://monserveur.onrender.com/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-    
-            const data = await res.json();
-            if (res.ok) {
-                localStorage.setItem('token', data.token);
-                window.location.href = 'inbox.html';
-            } else {
-                alert(data.message);
+            try {
+                const res = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    window.location.href = 'inbox.html';
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error("Erreur lors de la connexion :", error);
+                alert("Une erreur est survenue. Vérifiez votre connexion et réessayez.");
             }
         });
     </script>
