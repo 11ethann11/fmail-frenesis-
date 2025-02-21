@@ -87,5 +87,3 @@ Si tu as des questions ou un problème, contacte un administrateur RP.
 
 🎮 **Bon RP à tous avec Fmail !** 📨
 ```
-
-💡 **Ça te convient ou tu veux des modifications ?** 😃
