@@ -1,5 +1,3 @@
-Voici un fichier `README.md` que tu peux utiliser pour ton projet :  
-
 ```markdown
 # 📺 Fmail - Service de Messagerie RP
 
@@ -35,8 +33,9 @@ Bienvenue sur **Fmail**, un service de messagerie fictif pour le serveur RP. Ce 
 │       ├──   send.css
 ├── server.js
 ├── package-lock.json
-n/├── package.json
-n/├── database.db
+
+├── package.json
+├── database.db
 ```
 
 ---
