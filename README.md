@@ -20,19 +20,23 @@ Bienvenue sur **Fmail**, un service de messagerie fictif pour le serveur RP. Ce 
 ## 📂 Structure du Projet
 
 ```
-📂 Projet  
-├── 📁 backend (Node.js + Express)  
-│   ├── 📁 routes (Endpoints API)  
-│   ├── 📁 models (Base de données SQL)  
-│   ├── 📁 controllers (Logique métier)  
-│   ├── 📁 middleware (Sécurité & Auth)  
-│   ├── server.js (Fichier principal)  
-│   ├── config.js (Connexion SQL)  
-├── 📁 frontend (HTML, CSS, JS)  
-│   ├── index.html (Page d'accueil)  
-│   ├── admin.html (Panneau d'admin)  
-│   ├── 📁 assets (CSS & images)  
-│   ├── 📁 js (Fonctionnalités)  
+📂 Fmail  
+├── 📁 client (html + CSS)  
+│   ├──   admin.html
+│   ├──   inbox.html
+│   ├──   login.html
+│   ├──   register.html
+│   ├──   send.html
+│   ├── 📁 styles
+│       ├──   admin.css
+│       ├──   inbox.css
+│       ├──   login.css
+│       ├──   register.css
+│       ├──   send.css
+├── server.js
+├── package-lock.json
+├── package.json
+├── database.db
 ```
 
 ---
@@ -50,17 +54,9 @@ git clone https://github.com/TonPseudo/Fmail-RP.git
 cd Fmail-RP
 npm install
 ```
-
-### 3️⃣ Configuration
-Renomme `.env.example` en `.env` et remplis avec tes infos :
-```
-DATABASE_URL=ton_url_sql
-JWT_SECRET=ton_secret_token
-```
-
-### 4️⃣ Lancement
+### 3️⃣ Lancement
 ```bash
-npm start
+node server.js
 ```
 Ou en mode développement :
 ```bash
@@ -69,26 +65,16 @@ npm run dev
 
 ---
 
-## 🔒 Règlement d'Utilisation
-
-1️⃣ Les adresses email doivent obligatoirement se terminer par **@Fmail.com**  
-2️⃣ Toute infraction au règlement du serveur **Discord RP** peut entraîner une sanction.  
-3️⃣ **Les administrateurs peuvent voir les emails** pour des raisons RP.  
-4️⃣ Il est interdit d'envoyer des **messages hors RP** ou des **contenus inappropriés**.  
-5️⃣ **L'usurpation d'identité** est interdite (ex. se faire passer pour un admin).  
-
----
-
 ## 📬 Contact & Support
 
 Si tu as des questions ou un problème, contacte un administrateur RP.
 
 🔗 **Site officiel :** [Fmail.com](#)  
-🔗 **Discord du serveur :** [Rejoindre](#)  
+🔗 **Discord du serveur :** [Rejoindre](https://discord.gg/hnFj2DRy6t)  
 
 ---
 
 🎮 **Bon RP à tous avec Fmail !** 📨
 ```
 
-💡 **Tu veux que j’ajoute autre chose dedans ?** 😃
+**Merci de le modifier a votre guise est de ne pas l'utiliser comme le vrai site Fmail**
