@@ -19,22 +19,37 @@ Bienvenue sur **Fmail**, un service de messagerie fictif pour le serveur RP. Ce 
 
 ```
 📂 Fmail  
+
 ├── 📁 client (html + CSS)  
+
 │   ├──   admin.html
+
 │   ├──   inbox.html
+
 │   ├──   login.html
+
 │   ├──   register.html
+
 │   ├──   send.html
+
 │   ├── 📁 styles
+
 │       ├──   admin.css
+
 │       ├──   inbox.css
+
 │       ├──   login.css
+
 │       ├──   register.css
+
 │       ├──   send.css
+
 ├── server.js
+
 ├── package-lock.json
 
 ├── package.json
+
 ├── database.db
 ```
 
