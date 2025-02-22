@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚧 Maintenance en cours</title>
+    <link rel="stylesheet" href="styles/maintenance.css">
+</head>
+<body>
+    <div class="maintenance-container">
+        <h1>🚧 Fmail est maintenant en maintenance 🚧</h1>
+        <p id="animated-text"></p>
+    </div>
+
+    <script>
+        const text = "Revenez plus tard...";
+        let index = 0;
+        function animateText() {
+            if (index < text.length) {
+                document.getElementById("animated-text").innerHTML += text.charAt(index);
+                index++;
+                setTimeout(animateText, 150);
+            }
+        }
+        animateText();
+    </script>
+</body>
+</html>
