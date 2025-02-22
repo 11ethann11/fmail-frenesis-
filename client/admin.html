@@ -61,6 +61,11 @@
                     <button type="button" class="change-password-btn" onclick="changePassword('${user.email}')">🔑 Changer le mot de passe</button>
                 </div>
             </div>
+        <div class="maintenance-controls">
+    <h3>🔧 Mode Maintenance</h3>
+        <button class="maintenance-on" onclick="toggleMaintenance(true)">Activer Maintenance</button>
+        <button class="maintenance-off" onclick="toggleMaintenance(false)">Désactiver Maintenance</button>
+    </div>
         `).join('');
     }
 
@@ -162,6 +167,21 @@
         loadUsers();
     }
 
+    async function toggleMaintenance(active) {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://localhost:5000/maintenance', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ active: active ? 1 : 0 })
+    });
+
+    const result = await response.json();
+    alert(result.message);
+}
+    
     loadUsers();
 </script>
 </body>
