@@ -180,3 +180,38 @@ button.edit:hover {
     scrollbar-width: thin; /* Largeur fine */
     scrollbar-color: #e50914 #202020; /* Couleurs de la barre et de l'arrière-plan */
 }
+
+.maintenance-controls {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #1f1f1f;
+    border-radius: 10px;
+}
+
+.maintenance-controls button {
+    margin: 0.5rem;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.maintenance-on {
+    background: #e50914;
+}
+
+.maintenance-on:hover {
+    background: #ff1a1a;
+}
+
+.maintenance-off {
+    background: #4CAF50;
+}
+
+.maintenance-off:hover {
+    background: #45a049;
+}
