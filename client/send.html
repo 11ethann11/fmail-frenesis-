@@ -75,6 +75,20 @@
         alert(result.message || 'Erreur lors de l\'envoi.');
     }
 
+            async function checkMaintenance() {
+    try {
+        const response = await fetch('http://localhost:5000/maintenance');
+        const data = await response.json();
+        if (data.maintenance === 1 && window.location.pathname !== "/client/maintenance.html") {
+            window.location.href = "/client/maintenance.html";
+        }
+    } catch (error) {
+        console.error("Erreur lors de la vérification de la maintenance", error);
+    }
+}
+
+        // ⚙️ Initialisation
+        checkMaintenance();
     // Charger les emails au chargement de la page
     window.onload = loadEmails;
 </script>
