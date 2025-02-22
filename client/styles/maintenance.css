@@ -1,0 +1,21 @@
+body {
+    background-color: black;
+    color: red;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.maintenance-container {
+    margin-top: 15%;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+#animated-text {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+}
