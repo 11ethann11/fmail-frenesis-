@@ -323,6 +323,23 @@ app.put('/admin/editEmail', authenticateToken, isAdmin, (req, res) => {
     }
 });
 
+// Récupérer l'état de la maintenance
+app.get('/maintenance', (req, res) => {
+    const row = db.prepare("SELECT active FROM maintenance WHERE id = 1").get();
+    if (!row) return res.status(500).json({ error: "Erreur serveur : table maintenance introuvable" });
+    
+    res.json({ maintenance: row.active });
+});
+
+// Activer/Désactiver la maintenance (ADMIN)
+app.post('/maintenance', authenticateToken, isAdmin, (req, res) => {
+    const { active } = req.body;
+
+    db.prepare("INSERT INTO maintenance (id, active) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET active = ?")
+        .run(active, active);
+
+    res.json({ message: `Maintenance ${active ? "activée" : "désactivée"} !` });
+});
 
 // Lancer le serveur
 app.listen(PORT, '0.0.0.0', () => {
